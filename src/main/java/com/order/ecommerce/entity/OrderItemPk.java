@@ -14,12 +14,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class OrderItemPk implements Serializable {
 
-    private static long serialVersionUID = 5074947294298476737L;
+  private static long serialVersionUID = 5074947294298476737L;
 
-    @Column(name = "product_id", nullable = false)
-    private String productId;
+  @Column(name = "product_id", nullable = false)
+  private String productId;
 
-    @Column(name = "order_id", nullable = false)
-    private String orderId;
+  @Column(name = "order_id", nullable = false)
+  private String orderId;
 
 }

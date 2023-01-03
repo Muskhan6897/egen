@@ -33,28 +33,28 @@ public class OrderDto {
   @PositiveOrZero
   private final double shippingCharges;
 
-  @NotBlank(message = "title cannot be null or empty")
+  @NotBlank
   private final String title;
 
-  @NotNull(message = "shipping mode cannot be null")
+  @NotNull
   private final ShippingMode shippingMode;
 
   @PositiveOrZero
   private final double amount;
 
-  @NotNull(message = "payment mode cannot be null")
+  @NotNull
   private final PaymentMode paymentMode;
 
   @Valid
-  @NotNull(message = "billing address cannot be null")
+  @NotNull
   private final AddressDto billingAddress;
 
   @Valid
-  @NotNull(message = "shipping address cannot be null")
+  @NotNull
   private final AddressDto shippingAddress;
 
   @Valid
-  @NotNull(message = "order items cannot be null or empty")
+  @NotNull
   private final List<OrderItemDto> orderItems;
 
   private final OrderStatus orderStatus;

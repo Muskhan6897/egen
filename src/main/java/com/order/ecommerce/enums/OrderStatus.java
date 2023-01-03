@@ -2,16 +2,16 @@ package com.order.ecommerce.enums;
 
 public enum OrderStatus {
 
-    RECEIVED,
+  RECEIVED,
 
-    PROCESSING,
+  PROCESSING,
 
-    SHIPPED,
+  SHIPPED,
 
-    COMPLETED,
+  COMPLETED,
 
-    CANCELLED,
+  CANCELLED,
 
-    REFUNDED
+  REFUNDED
 
 }

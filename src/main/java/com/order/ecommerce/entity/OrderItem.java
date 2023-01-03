@@ -14,17 +14,17 @@ import java.io.Serializable;
 @Table(name = "ecommerce_order_item")
 public class OrderItem implements Serializable {
 
-    @EmbeddedId
-    private OrderItemPk orderItemPk;
+  @EmbeddedId
+  private OrderItemPk orderItemPk;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    private Product product;
+  @ManyToOne
+  @JoinColumn(name = "product_id", insertable = false, updatable = false)
+  private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", insertable = false, updatable = false)
-    private Order order;
+  @ManyToOne
+  @JoinColumn(name = "order_id", insertable = false, updatable = false)
+  private Order order;
 
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
+  @Column(name = "quantity", nullable = false)
+  private int quantity;
 }

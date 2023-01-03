@@ -2,10 +2,10 @@ package com.order.ecommerce.enums;
 
 public enum PaymentMode {
 
-    CASH,
+  CASH,
 
-    DEBIT,
+  DEBIT,
 
-    CREDIT
+  CREDIT
 
 }

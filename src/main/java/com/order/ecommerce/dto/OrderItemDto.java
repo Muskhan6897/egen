@@ -12,9 +12,9 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class OrderItemDto {
 
-  @NotNull(message = "product id cannot be null")
+  @NotNull
   private final String productId;
 
-  @Positive(message = "quantity cannot be negative")
+  @Positive
   private final int quantity;
 }

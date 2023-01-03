@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
@@ -14,15 +13,15 @@ public class ProductDto {
 
   private final String productId;
 
-  @NotBlank(message = "Product Sku cannot be null")
+  @NotBlank
   private final String sku;
 
-  @NotNull(message = "Product Title cannot be null")
+  @NotNull
   private final String title;
 
-  @NotNull(message = "Product Description cannot be null")
+  @NotNull
   private final String description;
 
-  @PositiveOrZero(message = "Product Price cannot be negative")
+  @PositiveOrZero
   private final double price;
 }

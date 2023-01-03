@@ -16,24 +16,24 @@ public class AddressDto {
 
   private final String addressId;
 
-  @NotBlank(message = "address1 cannot be null or empty")
+  @NotBlank
   private final String address1;
 
-  @NotNull(message = "address2 cannot be null")
+  @NotNull
   private final String address2;
 
-  @NotBlank(message = "city cannot be null or empty")
+  @NotBlank
   private final String city;
 
-  @NotBlank(message = "state cannot be null or empty")
+  @NotBlank
   private final String state;
 
-  @NotBlank(message = "zip cannot be null or empty")
+  @NotBlank
   private final String zip;
 
-  @Email(message = "invalid email entered")
+  @Email
   private final String email;
 
-  @Pattern(regexp = "^\\d{10}$", message = "invalid mobile number entered")
+  @Pattern(regexp = "^\\d{10}$")
   private final String phone;
 }

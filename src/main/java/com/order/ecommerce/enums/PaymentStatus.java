@@ -1,10 +1,10 @@
 package com.order.ecommerce.enums;
 
 public enum PaymentStatus {
-    PROCESSING,
+  PROCESSING,
 
-    PAID,
+  PAID,
 
-    REFUNDED
+  REFUNDED
 
 }

@@ -2,10 +2,10 @@ package com.order.ecommerce.enums;
 
 public enum ShippingMode {
 
-    PICKUP,
+  PICKUP,
 
-    DELIVERY,
+  DELIVERY,
 
-    CURBSIDE_PICKUP
+  CURBSIDE_PICKUP
 
 }
