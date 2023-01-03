@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class OrderResponseDto {
 
-    @NotNull
-    private final String orderId;
+  @NotNull
+  private final String orderId;
 
-    @NotNull
-    private final String orderStatus;
+  @NotNull
+  private final String orderStatus;
 
 }

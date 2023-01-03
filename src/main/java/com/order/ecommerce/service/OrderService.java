@@ -7,6 +7,7 @@ import com.order.ecommerce.dto.AddressDto;
 import com.order.ecommerce.dto.ProductDto;
 import com.order.ecommerce.entity.*;
 import com.order.ecommerce.enums.OrderStatus;
+import com.order.ecommerce.enums.PaymentMode;
 import com.order.ecommerce.enums.PaymentStatus;
 import com.order.ecommerce.mapper.OrderDetailsMapper;
 import com.order.ecommerce.repository.*;
@@ -125,11 +126,11 @@ public class OrderService implements IOrderService {
         return (List<OrderItem>) orderItemRepository.saveAll(orderItemList);
     }
 
-    private Payment buildAndSavePayment(double amount, String paymentMode) {
+    private Payment buildAndSavePayment(double amount, PaymentMode paymentMode) {
         Payment payment = new Payment(
                 UUID.randomUUID().toString(),
                 amount,
-                paymentMode,
+                paymentMode.name(),
                 UUID.randomUUID().toString(),
                 PaymentStatus.PROCESSING.name(),
                 LocalDate.now(),

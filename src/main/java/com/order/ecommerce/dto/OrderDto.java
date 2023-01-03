@@ -1,10 +1,16 @@
 package com.order.ecommerce.dto;
 
+import com.order.ecommerce.enums.OrderStatus;
+import com.order.ecommerce.enums.PaymentMode;
+import com.order.ecommerce.enums.ShippingMode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Data
@@ -12,35 +18,46 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto {
 
-    @NotNull
-    private final String customerId;
+  @NotBlank(message = "customer id cannot be null or empty")
+  private final String customerId;
 
-    private final double subTotal;
+  @PositiveOrZero
+  private final double subTotal;
 
-    private final double totalAmt;
+  @PositiveOrZero
+  private final double totalAmt;
 
-    private final double tax;
+  @PositiveOrZero
+  private final double tax;
 
-    private final double shippingCharges;
+  @PositiveOrZero
+  private final double shippingCharges;
 
-    @NotNull
-    private final String title;
+  @NotBlank(message = "title cannot be null or empty")
+  private final String title;
 
-    private final String shippingMode;
+  @NotNull(message = "shipping mode cannot be null")
+  private final ShippingMode shippingMode;
 
-    private final double amount;
+  @PositiveOrZero
+  private final double amount;
 
-    @NotNull
-    private final String paymentMode;
+  @NotNull(message = "payment mode cannot be null")
+  private final PaymentMode paymentMode;
 
-    @NotNull
-    private final AddressDto billingAddress;
+  @Valid
+  @NotNull(message = "billing address cannot be null")
+  private final AddressDto billingAddress;
 
-    private final AddressDto shippingAddress;
+  @Valid
+  @NotNull(message = "shipping address cannot be null")
+  private final AddressDto shippingAddress;
 
-    @NotNull
-    private final List<OrderItemDto> orderItems;
+  @Valid
+  @NotNull(message = "order items cannot be null or empty")
+  private final List<OrderItemDto> orderItems;
 
-    @NotNull
-    private final String orderStatus;
+  @NotNull(message = "order status cannot be null")
+  private final OrderStatus orderStatus;
+
 }

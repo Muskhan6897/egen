@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,7 +25,8 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
-        log.info("Creating Product with productId = {}", productDto.getProductId());
+        String productId = UUID.randomUUID().toString();
+        log.info("Creating Product with productId = {}", productId);
         Product entity = productMapper.toProductEntity(productDto);
         entity.setCreatedAt(LocalDate.now());
         Product savedProduct = productRepository.save(entity);

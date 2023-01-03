@@ -26,5 +26,5 @@ public class OrderItem implements Serializable {
     private Order order;
 
     @Column(name = "quantity", nullable = false)
-    private String quantity;
+    private int quantity;
 }

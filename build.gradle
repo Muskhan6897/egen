@@ -22,6 +22,7 @@ ext {
     mapStructVersion = '1.4.2.Final'
     embeddedPostgresVersion = '2.0.0'
     embeddedDBTestVersion = '2.1.2'
+    validationsVersion = '3.0.1'
 }
 
 dependencies {
@@ -29,6 +30,9 @@ dependencies {
     /* spring boot */
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+
+    /* spring boot validations*/
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${validationsVersion}"
 
     /* using spring doc instead of springfox */
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: "${openApiVersion}"
