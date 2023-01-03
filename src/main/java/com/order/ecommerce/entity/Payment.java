@@ -26,14 +26,14 @@ public class Payment implements Serializable {
   @Column(name = "amount", nullable = false)
   private double amount;
 
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   @Column(name = "payment_mode", nullable = false)
   private PaymentMode paymentMode;
 
   @Column(name = "confirmation_number", nullable = false)
   private String confirmationNumber;
 
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   @Column(name = "payment_status", nullable = false)
   private PaymentStatus paymentStatus;
 

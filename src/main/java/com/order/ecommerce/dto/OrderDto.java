@@ -1,5 +1,7 @@
 package com.order.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.order.ecommerce.enums.OrderStatus;
 import com.order.ecommerce.enums.PaymentMode;
 import com.order.ecommerce.enums.ShippingMode;
@@ -57,7 +59,9 @@ public class OrderDto {
   @NotNull
   private final List<OrderItemDto> orderItems;
 
+  @JsonIgnore
   private final OrderStatus orderStatus;
 
+  @JsonProperty(value = "isBillingAndShippingAddressSame")
   private final boolean isBillingAndShippingAddressSame;
 }

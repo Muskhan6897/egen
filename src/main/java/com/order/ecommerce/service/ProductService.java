@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class ProductService implements IProductService {
   private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
 
   @Override
+  @Transactional
   public ProductDto createProduct(ProductDto productDto) {
     log.info("Creating Product with sku = {}", productDto.getSku());
     Product entity = productMapper.toProductEntity(productDto);
@@ -33,6 +35,10 @@ public class ProductService implements IProductService {
 
   @Override
   public ProductDto findProductById(String productId) {
+    return productMapper.toProductDto(findProductByProductId(productId));
+  }
+
+  public Product findProductByProductId(String productId) {
     log.info("Finding product for productId = {}", productId);
     Optional<Product> product = productRepository.findById(productId);
     if (product.isEmpty()) {
@@ -41,19 +47,6 @@ public class ProductService implements IProductService {
     }
 
     log.info("Successfully found product for productId = {}", productId);
-    return productMapper.toProductDto(product.get());
+    return product.get();
   }
-
-  @Override
-  public List<ProductDto> findAllById(List<String> ids) {
-    log.info("Finding products for ids = {}", ids);
-    List<Product> productList = (List<Product>) productRepository.findAllById(ids);
-    if (productList.isEmpty()) {
-      log.info("No product(s) found for ids = {}", ids);
-      return null;
-    }
-    log.info("Successfully found {} products", productList.size());
-    return productList.stream().map(productMapper::toProductDto).collect(Collectors.toList());
-  }
-
 }

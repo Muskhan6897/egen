@@ -18,7 +18,7 @@ public class Order implements Serializable {
   @Column(name = "order_id", nullable = false, unique = true)
   private String orderId;
 
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   @Column(name = "order_status")
   private OrderStatus orderStatus;
 
@@ -40,7 +40,7 @@ public class Order implements Serializable {
   @Column(name = "title")
   private String title;
 
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   @Column(name = "shipping_mode")
   private ShippingMode shippingMode;
 

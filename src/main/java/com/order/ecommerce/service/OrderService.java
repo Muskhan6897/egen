@@ -1,11 +1,15 @@
 package com.order.ecommerce.service;
 
-import com.order.ecommerce.dto.*;
+import com.order.ecommerce.dto.AddressDto;
+import com.order.ecommerce.dto.OrderDto;
+import com.order.ecommerce.dto.OrderItemDto;
+import com.order.ecommerce.dto.OrderResponseDto;
 import com.order.ecommerce.entity.*;
 import com.order.ecommerce.enums.OrderStatus;
 import com.order.ecommerce.enums.PaymentMode;
 import com.order.ecommerce.enums.PaymentStatus;
 import com.order.ecommerce.exceptions.ItemNotFoundException;
+import com.order.ecommerce.exceptions.NotEnoughQuantityException;
 import com.order.ecommerce.mapper.OrderDetailsMapper;
 import com.order.ecommerce.repository.IAddressRepository;
 import com.order.ecommerce.repository.IOrderItemRepository;
@@ -19,9 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,7 +37,9 @@ public class OrderService implements IOrderService {
   private final IAddressRepository addressRepository;
 
   private final IProductService productService;
+  private final IProductInventoryService productInventoryService;
   private final OrderDetailsMapper orderDetailsMapper = Mappers.getMapper(OrderDetailsMapper.class);
+  private final int ZERO = 0;
 
   {
     //addressId not present
@@ -58,31 +62,65 @@ public class OrderService implements IOrderService {
     log.info("Creating Order for customer = {}", orderDto.getCustomerId());
 
     log.info("Verifying all products exists before generating order");
-    List<String> productIds = orderDto.getOrderItems().stream().map(OrderItemDto::getProductId)
-        .distinct().collect(Collectors.toList());
-    List<ProductDto> products = productService.findAllById(productIds);
-    if (products == null || products.isEmpty() || products.size() != productIds.size()) {
-      log.info("Not all product(s) exist, failed to create order!");
-      return null;
-    }
+    List<ProductInventory> updatedProductInventories = checkInventoryForAvailableStock(orderDto);
 
     Order order = generateOrder(orderDto);
     log.info("Generated order for orderId = {}", order.getOrderId());
 
     Order savedOrder = orderRepository.save(order);
 
-    String savedOrderId = savedOrder.getOrderId();
-    List<OrderItem> orderItemList = buildOrderItems(orderDto.getOrderItems(), savedOrderId);
-    log.info("Saving order item list for order id = {}", savedOrderId);
+    updateOrderItems(orderDto, savedOrder);
 
-    orderItemRepository.saveAll(orderItemList);
+    updateProductInventory(updatedProductInventories, savedOrder);
 
-    log.info("Successfully saved order & order items with id = {} for customer = {} on {}",
-        savedOrder.getOrderId(), savedOrder.getCustomerId(), savedOrder.getCreatedAt());
     return OrderResponseDto.builder()
-        .orderId(savedOrderId)
+        .orderId(savedOrder.getOrderId())
         .orderStatus(savedOrder.getOrderStatus())
         .build();
+  }
+
+  private List<ProductInventory> checkInventoryForAvailableStock(OrderDto orderDto) {
+    List<String> productIds = orderDto.getOrderItems().stream().map(OrderItemDto::getProductId)
+        .distinct().collect(Collectors.toList());
+    List<ProductInventory> productInventories = productInventoryService.findAllById(productIds);
+    if (Objects.isNull(productInventories) || productInventories.isEmpty() || productInventories.size() != productIds.size()) {
+      throw new NotEnoughQuantityException("Not all product(s) exist, failed to create order!");
+    }
+
+    Map<String, Integer> orderItems = orderDto.getOrderItems().stream()
+        .collect(Collectors.toMap(OrderItemDto::getProductId, OrderItemDto::getQuantity));
+
+    return productInventories.stream().peek(
+        item -> {
+          Integer requiredQuantity = Optional.ofNullable(orderItems.get(item.getProduct().getProductId())).orElse(ZERO);
+          Integer availableQuantity = Optional.of(item.getQuantity()).orElse(ZERO);
+
+          if (requiredQuantity > availableQuantity) {
+            throw new NotEnoughQuantityException("Required Quantity not available for product: " + item.getProductId());
+          }
+
+          int updatedQuantity = availableQuantity - requiredQuantity;
+          item.setQuantity(updatedQuantity);
+        }
+    ).collect(Collectors.toList());
+  }
+
+
+  private void updateOrderItems(OrderDto orderDto, Order savedOrder) {
+    List<OrderItem> orderItemList = buildOrderItems(orderDto.getOrderItems(), savedOrder.getOrderId());
+    log.info("Saving order item list for order id = {}", savedOrder.getOrderId());
+    orderItemRepository.saveAll(orderItemList);
+    log.info("Successfully saved order & order items with id = {} for customer = {} on {}",
+        savedOrder.getOrderId(), savedOrder.getCustomerId(), savedOrder.getCreatedAt());
+  }
+
+  private void updateProductInventory(List<ProductInventory> updatedProductInventories, Order savedOrder) {
+    log.info("Updating product inventory for order id = {}", savedOrder.getOrderId());
+    updatedProductInventories.forEach(item -> {
+      productInventoryService.updateProductInventory(item.getProductId(), item.getQuantity());
+    });
+    log.info("Successfully updated product inventory for order id = {} for customer = {} on {}",
+        savedOrder.getOrderId(), savedOrder.getCustomerId(), savedOrder.getCreatedAt());
   }
 
   @Override
@@ -103,6 +141,7 @@ public class OrderService implements IOrderService {
   }
 
   @Override
+  @Transactional
   public void updateOrderStatus(String orderId, OrderStatus status) {
     Order order = findOrderByOrderId(orderId);
     order.setOrderStatus(status);

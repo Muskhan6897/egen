@@ -62,8 +62,18 @@ create table if not exists ecommerce_order_item
     FOREIGN KEY (product_id) REFERENCES ecommerce_product (product_id)
 );
 
+CREATE TABLE public.ecommerce_product_inventory (
+	product_id varchar(255) NOT NULL,
+	quantity integer NOT NULL,
+	CONSTRAINT ecommerce_product_inventory_pkey PRIMARY KEY (product_id),
+	FOREIGN KEY (product_id) REFERENCES ecommerce_product(product_id)
+);
+
 insert into ecommerce_product (product_id, created_at, description, price, sku, title)
 values (109, current_date, 'Whey', '1.99', '1001', 'protein');
 
 insert into ecommerce_product (product_id, created_at, description, price, sku, title)
 values (108, current_date, 'Orgain', '5.99', '1005', 'protein');
+
+insert into ecommerce_product_inventory (product_id, quantity) values (108, 10);
+insert into ecommerce_product_inventory (product_id, quantity) values (109, 20);

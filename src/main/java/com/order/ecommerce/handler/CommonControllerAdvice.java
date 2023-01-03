@@ -1,6 +1,7 @@
 package com.order.ecommerce.handler;
 
 import com.order.ecommerce.exceptions.ItemNotFoundException;
+import com.order.ecommerce.exceptions.NotEnoughQuantityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,19 @@ public class CommonControllerAdvice {
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<ErrorResponse> handleAnyRuntimeException(RuntimeException ex) {
+  @ExceptionHandler(NotEnoughQuantityException.class)
+  public ResponseEntity<ErrorResponse> handleQuantityNotEnoughException(NotEnoughQuantityException ex) {
     log.error("Error occurred {}", ex.getMessage());
     ErrorResponse response = ErrorResponse.builder().errors(List.of(new Error("OEC-1003", ex.getMessage()))).build();
+
+    return new ResponseEntity(Optional.of(response), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ErrorResponse> handleAnyRuntimeException(RuntimeException ex) {
+    log.error("Error occurred {}", ex);
+    ErrorResponse response = ErrorResponse.builder().errors(List.of(new Error("OEC-1004", ex.getMessage()))).build();
 
     return new ResponseEntity(Optional.of(response), HttpStatus.INTERNAL_SERVER_ERROR);
   }

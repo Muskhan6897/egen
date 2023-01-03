@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -39,6 +40,6 @@ public class Address implements Serializable {
   @Column(name = "createdAt", nullable = false)
   private LocalDate createdAt;
 
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "billingAddress")
-  private Order order;
+  @OneToMany(targetEntity = Order.class, fetch = FetchType.LAZY, mappedBy = "billingAddress")
+  private List<Order> order;
 }
