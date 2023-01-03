@@ -17,40 +17,40 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class OrderControllerTest {
-    private static final OrderDto orderDtoRequest = OrderUtil.createTestOrder();
-    private static final OrderResponseDto mockOrderResponse = new OrderResponseDto("2e99fe21-2243-4004-9640-e992bbcc5040", "PROCESSING");
+  private static final OrderDto orderDtoRequest = OrderUtil.createTestOrder();
+  private static final OrderResponseDto mockOrderResponse = new OrderResponseDto("2e99fe21-2243-4004-9640-e992bbcc5040", OrderStatus.PROCESSING);
 
-    @Mock
-    private OrderService orderService;
-    @InjectMocks
-    private OrderController orderController;
+  @Mock
+  private OrderService orderService;
+  @InjectMocks
+  private OrderController orderController;
 
 
-    @Test
-    void testCreateOrder() {
-        when(orderService.createOrder(orderDtoRequest)).thenReturn(mockOrderResponse);
+  @Test
+  void testCreateOrder() {
+    when(orderService.createOrder(orderDtoRequest)).thenReturn(mockOrderResponse);
 
-        OrderResponseDto actualResponse = orderController.createOrder(orderDtoRequest);
+    OrderResponseDto actualResponse = orderController.createOrder(orderDtoRequest);
 
-        assertThat(actualResponse).isEqualTo(mockOrderResponse);
-    }
+    assertThat(actualResponse).isEqualTo(mockOrderResponse);
+  }
 
-    @Test
-    void testGetOrder() {
-        String orderId = "2e99fe21-2243-4004-9640-e992bbcc5040";
-        when(orderService.findOrderById(orderId)).thenReturn(orderDtoRequest);
+  @Test
+  void testGetOrder() {
+    String orderId = "2e99fe21-2243-4004-9640-e992bbcc5040";
+    when(orderService.findOrderById(orderId)).thenReturn(orderDtoRequest);
 
-        OrderDto actualResponse = orderController.findOrderBy(orderId);
+    OrderDto actualResponse = orderController.findOrderBy(orderId);
 
-        assertThat(actualResponse).isEqualTo(orderDtoRequest);
-    }
+    assertThat(actualResponse).isEqualTo(orderDtoRequest);
+  }
 
-    @Test
-    void testPatchOrder() {
-        String orderId = "2e99fe21-2243-4004-9640-e992bbcc5040";
+  @Test
+  void testPatchOrder() {
+    String orderId = "2e99fe21-2243-4004-9640-e992bbcc5040";
 
-        orderController.updateOrderStatus(orderId, OrderStatus.CANCELLED.name());
+    orderController.updateOrderStatus(orderId, OrderStatus.CANCELLED);
 
-        verify(orderService).updateOrderStatus(orderId, OrderStatus.CANCELLED.name());
-    }
+    verify(orderService).updateOrderStatus(orderId, OrderStatus.CANCELLED);
+  }
 }

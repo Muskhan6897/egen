@@ -30,7 +30,6 @@ public class ProductController {
   @PostMapping
   @Operation(summary = "Create a product", description = "Create a product")
   public ProductDto createProduct(@Valid @RequestBody ProductDto productDto) {
-//    validateArgument(productDto);
     return productService.createProduct(productDto);
   }
 

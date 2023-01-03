@@ -1,5 +1,6 @@
 package com.order.ecommerce.dto;
 
+import com.order.ecommerce.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,6 @@ public class OrderResponseDto {
   private final String orderId;
 
   @NotNull
-  private final String orderStatus;
+  private final OrderStatus orderStatus;
 
 }

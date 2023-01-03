@@ -12,7 +12,9 @@ import javax.validation.constraints.PositiveOrZero;
 @Builder
 public class ProductDto {
 
-  @NotNull(message = "Product Sku cannot be null")
+  private final String productId;
+
+  @NotBlank(message = "Product Sku cannot be null")
   private final String sku;
 
   @NotNull(message = "Product Title cannot be null")

@@ -1,5 +1,7 @@
 package com.order.ecommerce.entity;
 
+import com.order.ecommerce.enums.OrderStatus;
+import com.order.ecommerce.enums.ShippingMode;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,8 +18,9 @@ public class Order implements Serializable {
     @Column(name = "order_id", nullable = false, unique = true)
     private String orderId;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "order_status")
-    private String orderStatus;
+    private OrderStatus orderStatus;
 
     @Column(name = "customer_id")
     private String customerId;
@@ -37,8 +40,9 @@ public class Order implements Serializable {
     @Column(name = "title")
     private String title;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "shipping_mode")
-    private String shippingMode;
+    private ShippingMode shippingMode;
 
     @Column(name = "created_at")
     private LocalDate createdAt;

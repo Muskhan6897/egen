@@ -34,7 +34,7 @@ public class Product implements Serializable {
     private double price;
 
     @Column(name = "createdAt", nullable = false)
-    private LocalDate createdAt;
+    private LocalDate createdAt = LocalDate.now();
 
     @OneToMany(targetEntity = OrderItem.class, fetch = FetchType.LAZY, mappedBy = "product")
     private List<OrderItem> orderItems;

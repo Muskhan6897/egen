@@ -57,7 +57,7 @@ public class OrderDto {
   @NotNull(message = "order items cannot be null or empty")
   private final List<OrderItemDto> orderItems;
 
-  @NotNull(message = "order status cannot be null")
   private final OrderStatus orderStatus;
 
+  private final boolean isBillingAndShippingAddressSame;
 }

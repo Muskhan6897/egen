@@ -21,21 +21,23 @@ public class OrderUtil {
                 2.0,
                 2.0,
                 "test",
-                ShippingMode.DELIVERY.name(),
+                ShippingMode.DELIVERY,
                 10.0,
-                PaymentMode.CREDIT.name(),
+                PaymentMode.CREDIT,
                 createAddress(),
                 createAddress(),
                 List.of(
-                        new OrderItemDto("101", "10"),
-                        new OrderItemDto("102", "10")
+                        new OrderItemDto("101", 10),
+                        new OrderItemDto("102", 10)
                 ),
-                OrderStatus.RECEIVED.name()
+                OrderStatus.RECEIVED,
+            true
         );
     }
 
     private static AddressDto createAddress() {
         return new AddressDto(
+            "address_id_1",
                 "3755 M lane",
                 "Apt 311",
                 "Aurora",
