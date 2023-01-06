@@ -1,6 +1,7 @@
 package com.order.ecommerce.controller;
 
 import com.order.ecommerce.dto.OrderDto;
+import com.order.ecommerce.dto.OrderItemDto;
 import com.order.ecommerce.dto.OrderResponseDto;
 import com.order.ecommerce.enums.OrderStatus;
 import com.order.ecommerce.service.IOrderService;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 
 import static com.order.ecommerce.utils.EcommerceUtils.validateArgument;
@@ -61,4 +63,11 @@ public class OrderController {
     validateArgument(Objects.isNull(orderStatus), "order status cannot be null");
     orderService.updateOrderStatus(orderId, orderStatus);
   }
+
+  @GetMapping("/customer/{customerId}")
+  public List<OrderItemDto> findByCustomerId(@PathVariable(name = "customerId") String customerId) {
+    validateArgument(Objects.isNull(customerId) || customerId.isEmpty(), "order id cannot be null or empty");
+    return orderService.findByCustomerId(customerId);
+  }
+
 }

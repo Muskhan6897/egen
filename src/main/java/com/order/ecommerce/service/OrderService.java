@@ -149,6 +149,32 @@ public class OrderService implements IOrderService {
     log.info("Successfully updated order status to = {} for order id = {}", status, orderId);
   }
 
+  @Override
+  public List<OrderItemDto> findByCustomerId(String customerId) {
+    Map<String, OrderItemDto> map = new HashMap<>();
+
+    List<Order> orders = orderRepository.findByCustomerId(customerId);
+
+    orders.stream().map(Order::getOrderItems).forEach(
+        orderItem -> {
+          orderItem.forEach(
+              product -> {
+                String key = product.getProduct().getProductId();
+                if (map.containsKey(key)) {
+                  OrderItemDto itemDto = map.get(key);
+                  int newQuantity = itemDto.getQuantity() + product.getQuantity();
+                  map.put(key, OrderItemDto.builder().productId(key).quantity(newQuantity).build());
+                } else {
+                  map.put(key, OrderItemDto.builder().quantity(product.getQuantity()).productId(key).build());
+                }
+              }
+          );
+        }
+    );
+
+    return new ArrayList<>(map.values());
+  }
+
   private Order generateOrder(OrderDto orderDto) {
     Order order = orderDetailsMapper.toOrderEntity(orderDto);
 
